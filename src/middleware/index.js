@@ -53,7 +53,7 @@ exports.comparePass = async (req, res, next) => {
     next()
     }
     else {
-      throw new Error({ msg: "Incorrect Credentials"})
+      throw new Error("Incorrect Credentials")
     }
     //find user in database, compare password from body with password from db with bcrypt
     //if successful pass user to controller through req, if unsuccessful send error
@@ -61,9 +61,38 @@ exports.comparePass = async (req, res, next) => {
   }
   catch (error) {
     console.log(error);
-    res.send({ err: error })
+    res.send({ error: error.message })
   }
 };
+
+exports.updatePass = async (req, res, next) => {
+  try {
+    console.log("Comparing entered Password with stored Password...")
+
+    req.user = await User.findOne({ username: req.body.username})
+    console.log(req.body.password);
+    console.log(req.user.password);
+    console.log(await bcrypt.compare(req.body.password, req.user.password))
+    if (req.user && (await bcrypt.compare(req.body.password, req.user.password))) {
+      console.log("hashing New Password...")
+      const newPass = req.body.newPassword;             //grab value
+      console.log(newPass)
+      console.log("is now Hashed as...")
+      const newHashedPass = await bcrypt.hash(newPass, 8); //hash value
+      console.log(newHashedPass)
+      req.body.newPassword = newHashedPass;             //re-store value
+      next()
+    }
+    else {
+      throw new Error("Incorrect Credentials")
+      res.send({ err: error})
+    }    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
 
 exports.tokenCheck = async (req, res, next) => {
   try {

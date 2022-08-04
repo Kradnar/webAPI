@@ -64,7 +64,7 @@ exports.updateUser = async (req, res) => {
       let oldPass = req.body.password
       let newPass = req.body.newPassword
       console.log(`Updating Password`)
-      await User.updateOne({password: user.password}, {$set: {password: req.body.password}})
+      await User.updateOne({password: user.password}, {$set: {password: req.body.newPassword}})
       res.send({ msg: "Password Updated"})
     }
     else {
