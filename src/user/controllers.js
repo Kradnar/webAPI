@@ -10,7 +10,7 @@ exports.createUser = async (req, res) => {
   }
   catch (error) {
     console.log(error);
-    res.send({ err: error });
+    res.status(418).send({ err: error });
   }
 };
 
@@ -21,7 +21,7 @@ exports.login = async (req, res) => {
     res.send({ user: req.user.username, token });
   } catch (error) {
     console.log(error);
-    res.send({ err: error });
+    res.status(418).send({ err: error });
   }
 };
 
@@ -37,7 +37,7 @@ exports.getAllUsers = async (req, res) => {
     res.send({ msg: "This came from getAllUsers" })
   } catch (error) {
     console.log(error);
-    res.send({ err: error });
+    res.status(418).send({ err: error });
   }
 };
 
@@ -68,13 +68,13 @@ exports.updateUser = async (req, res) => {
       res.send({ msg: "Password Updated"})
     }
     else {
-      console.log("Error: Else command reached")
-      res.send({ msg: "Else Command"})
+      console.log("Else condition reached")
+      throw new Error("No newUpdate field detected")
     }
   }
   catch (error) {
     console.log(error)
-    res.send({ err: error })
+    res.status(418).send({ error: error.message })
   }
 }
 
@@ -86,28 +86,28 @@ exports.deleteUser = async (req, res) => {
 }
 catch (error) {
   console.log(error);
-  res.send({ err: error });
+  res.status(418).send({ err: error });
 }
 }
 
 //! \/ Experimental Code \/
-exports.readUser = async (req, res) => {
-  try {
-    const user = await User.findOne({username: req.body.username})
-    let userName = req.body.username
-    let passWord = req.body.password
-    console.log(userName)
-    console.log(req.body.email)
-    console.log(passWord)
-    console.log("------")
-    console.log(user.password)
-    
-    
-    res.send({ msg: "This came from readUser"})
-    // bcrypt.compare(req.body.password, hash, function(res) {res === false});
-  }
-  catch (error) {
-    console.log(error);
-    res.send({err: error})
-  }
-};
+// exports.readUser = async (req, res) => {
+//   try {
+//     const user = await User.findOne({username: req.body.username})
+//     let userName = req.body.username
+//     let passWord = req.body.password
+//     console.log(userName)
+//     console.log(req.body.email)
+//     console.log(passWord)
+//     console.log("------")
+//     console.log(user.password)
+
+
+//     res.send({ msg: "This came from readUser"})
+//     // bcrypt.compare(req.body.password, hash, function(res) {res === false});
+//   }
+//   catch (error) {
+//     console.log(error);
+//     res.send({err: error})
+//   }
+// };
