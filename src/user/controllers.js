@@ -6,7 +6,7 @@ exports.createUser = async (req, res) => {
     console.log("Creating User...")
     const newUser = await User.create(req.body);
     console.log(newUser);
-    res.send({ msg: "This came from createUser" });
+    res.send({ msg: newUser });
   }
   catch (error) {
     console.log(error);
@@ -34,7 +34,7 @@ exports.getAllUsers = async (req, res) => {
     });
     console.log(result)
     res.send({ allUsers: result });
-    res.send({ msg: "This came from getAllUsers" })
+    // res.send({ msg: "This came from getAllUsers" })
   } catch (error) {
     console.log(error);
     res.status(418).send({ err: error });
