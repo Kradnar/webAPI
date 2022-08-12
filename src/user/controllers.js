@@ -53,7 +53,7 @@ exports.updateUser = async (req, res) => {
       res.send({ msg: "Username Updated"})
     }
     else if (req.body.params.newEmail) {
-      const user = await User.findOne({email: req.body.params.username})
+      const user = await User.findOne({username: req.body.params.username})
       let oldName = req.body.params.username
       let newEmail = req.body.params.newEmail
       console.log({User})

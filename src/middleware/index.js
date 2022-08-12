@@ -66,25 +66,26 @@ exports.comparePass = async (req, res, next) => {
 };
 
 exports.updatePass = async (req, res, next) => {
+  console.log("running updatePass")         //! Params added to work with front end
   try {
-    if (!req.body.password) {
+    if (!req.body.params.newPassword) {
       console.log("Skipping Update Password...")
       next()
     }
     else {    
       console.log("Comparing entered Password with stored Password...")
-      req.user = await User.findOne({ username: req.body.username})
-      console.log(req.body.password);
+      req.user = await User.findOne({ username: req.body.params.username})
+      console.log(req.body.params.password);
       console.log(req.user.password);
-      console.log(await bcrypt.compare(req.body.password, req.user.password))
-      if (req.user && (await bcrypt.compare(req.body.password, req.user.password))) {
+      console.log(await bcrypt.compare(req.body.params.password, req.user.password))
+      if (req.user && (await bcrypt.compare(req.body.params.password, req.user.password))) {
         console.log("hashing New Password...")
-        const newPass = req.body.newPassword;             //grab value
+        const newPass = req.body.params.newPassword;             //grab value
         console.log(newPass)
         console.log("is now Hashed as...")
         const newHashedPass = await bcrypt.hash(newPass, 8); //hash value
         console.log(newHashedPass)
-        req.body.newPassword = newHashedPass;             //re-store value
+        req.body.params.newPassword = newHashedPass;             //re-store value
         next()
       }
       else {
@@ -95,6 +96,36 @@ exports.updatePass = async (req, res, next) => {
     console.log(error);
     res.status(418).send({ error: error.message });
   }
+                                                          //! no params
+  // try {
+  //   if (!req.body.newPassword) {
+  //     console.log("Skipping Update Password...")
+  //     next()
+  //   }
+  //   else {    
+  //     console.log("Comparing entered Password with stored Password...")
+  //     req.user = await User.findOne({ username: req.body.username})
+  //     console.log(req.body.password);
+  //     console.log(req.user.password);
+  //     console.log(await bcrypt.compare(req.body.password, req.user.password))
+  //     if (req.user && (await bcrypt.compare(req.body.password, req.user.password))) {
+  //       console.log("hashing New Password...")
+  //       const newPass = req.body.newPassword;             //grab value
+  //       console.log(newPass)
+  //       console.log("is now Hashed as...")
+  //       const newHashedPass = await bcrypt.hash(newPass, 8); //hash value
+  //       console.log(newHashedPass)
+  //       req.body.newPassword = newHashedPass;             //re-store value
+  //       next()
+  //     }
+  //     else {
+  //       throw new Error("Incorrect Credentials")
+  //     }
+  //   }    
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(418).send({ error: error.message });
+  // }
 }
 
 exports.tokenCheck = async (req, res, next) => {
